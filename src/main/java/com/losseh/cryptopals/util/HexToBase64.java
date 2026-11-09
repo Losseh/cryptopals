@@ -1,9 +1,12 @@
-package util;
+package com.losseh.cryptopals.util;
+
+import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HexFormat;
 
+@Component
 public class HexToBase64 {
 
     private static final int BASE64_BITMASK = 0x3f;

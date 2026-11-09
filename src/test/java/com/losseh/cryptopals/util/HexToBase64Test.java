@@ -1,4 +1,4 @@
-package util;
+package com.losseh.cryptopals.util;
 
 import org.junit.jupiter.api.Test;
 

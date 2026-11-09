@@ -1,7 +1,10 @@
-package util;
+package com.losseh.cryptopals.util;
+
+import org.springframework.stereotype.Component;
 
 import java.util.HexFormat;
 
+@Component
 public class Xor {
 
     public String xor(String v1, String v2) {
