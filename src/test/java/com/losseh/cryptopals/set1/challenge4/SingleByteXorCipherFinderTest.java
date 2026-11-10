@@ -17,6 +17,7 @@ class SingleByteXorCipherFinderTest {
             )
     );
 
+    //set1/challenge4
     @Test
     public void shouldFindCorrectAnswer() throws IOException {
         Path file = Path.of("src", "test", "resources", "4.txt");
