@@ -1,10 +1,7 @@
-package com.losseh.cryptopals.challenge3;
+package com.losseh.cryptopals.set1.challenge3;
 
 import com.losseh.cryptopals.util.Xor;
 import org.junit.jupiter.api.Test;
-import org.mockito.Answers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -1,4 +1,4 @@
-package com.losseh.cryptopals.challenge3;
+package com.losseh.cryptopals.set1.challenge3;
 
 import com.losseh.cryptopals.util.Xor;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,10 @@ public class SingleByteXorCipher {
     private final Xor xor;
 
     public String decrypt(String cipherText) {
+        return decryptWithDetails(cipherText).getDecipheredText();
+    }
+
+    public ScoredDecipherResult decryptWithDetails(String cipherText) {
         byte[] cipherTextBytes = HEX.parseHex(cipherText);
         int size = cipherTextBytes.length;
 
@@ -32,7 +36,7 @@ public class SingleByteXorCipher {
                 .mapKeyValue((key, score) -> new ScoredDecipherResult(key, candidateMap.get(key).getDecipheredText(), score))
                 .toList();
 
-        return scoredDecipherResults.get(scoredDecipherResults.size() - 1).getDecipheredText();
+        return scoredDecipherResults.get(scoredDecipherResults.size() - 1);
     }
 
     private Map<String, DecipherResult> computeCandidateMap(byte[] cipherTextBytes, int size) {
@@ -84,12 +88,5 @@ public class SingleByteXorCipher {
     private static class DecipherResult {
         String decipheredText;
         Map<Character, Integer> characterFrequency;
-    }
-
-    @Value
-    private static class ScoredDecipherResult {
-        String key;
-        String decipheredText;
-        int score;
     }
 }
