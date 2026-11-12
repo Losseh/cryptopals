@@ -1,8 +1,8 @@
 package com.losseh.cryptopals.set1.challenge3;
 
+import com.losseh.cryptopals.set1.model.ScoredSingleKeyDecryptionResult;
 import com.losseh.cryptopals.util.Xor;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import one.util.streamex.EntryStream;
 
 import java.util.*;
@@ -17,36 +17,38 @@ public class SingleByteXorCipher {
     private final Xor xor;
 
     public String decrypt(String cipherText) {
-        return decryptWithDetails(cipherText).getDecipheredText();
+        return decryptWithDetails(cipherText).decipheredText();
     }
 
-    public ScoredDecipherResult decryptWithDetails(String cipherText) {
-        byte[] cipherTextBytes = HEX.parseHex(cipherText);
-        int size = cipherTextBytes.length;
+    public ScoredSingleKeyDecryptionResult decryptWithDetails(String cipherText) {
+        return decryptWithDetails(HEX.parseHex(cipherText));
+    }
 
-        Map<String, DecipherResult> candidateMap = computeCandidateMap(cipherTextBytes, size);
+    public ScoredSingleKeyDecryptionResult decryptWithDetails(byte[] cipherTextBytes) {
+        Map<Byte, DecryptionResultWithCharFrequency> candidateMap = computeCandidateMap(cipherTextBytes);
 
-        Map<String, Integer> scoreMap = EntryStream.of(candidateMap)
-                .mapValues(DecipherResult::getCharacterFrequency)
+        Map<Byte, Integer> scoreMap = EntryStream.of(candidateMap)
+                .mapValues(DecryptionResultWithCharFrequency::characterFrequency)
                 .mapValues(this::score)
                 .toMap();
 
-        List<ScoredDecipherResult> scoredDecipherResults = EntryStream.of(scoreMap)
+        List<ScoredSingleKeyDecryptionResult> decryptionResults = EntryStream.of(scoreMap)
                 .sortedBy(Map.Entry::getValue)
-                .mapKeyValue((key, score) -> new ScoredDecipherResult(key, candidateMap.get(key).getDecipheredText(), score))
+                .mapKeyValue((key, score) ->
+                        new ScoredSingleKeyDecryptionResult(key, candidateMap.get(key).decryptedText(), score))
                 .toList();
 
-        return scoredDecipherResults.get(scoredDecipherResults.size() - 1);
+        return decryptionResults.get(decryptionResults.size() - 1);
     }
 
-    private Map<String, DecipherResult> computeCandidateMap(byte[] cipherTextBytes, int size) {
-        Map<String, DecipherResult> candidateMap = new HashMap<>();
+    private Map<Byte, DecryptionResultWithCharFrequency> computeCandidateMap(byte[] cipherTextBytes) {
+        Map<Byte, DecryptionResultWithCharFrequency> candidateMap = new HashMap<>();
         for (int i = 0; i < 256; i++) {
             byte key = (byte) i;
-            byte[] decryptedCandidateBytes = xor.xor(cipherTextBytes, repeat(key, size));
+            byte[] decryptedCandidateBytes = xor.xorRepeating(cipherTextBytes, new byte[] {key});
             String decryptedCandidateAscii = new String(decryptedCandidateBytes);
             Map<Character, Integer> charFrequency = getCharFrequency(decryptedCandidateAscii);
-            candidateMap.put(HEX.toHexDigits(key), new DecipherResult(decryptedCandidateAscii, charFrequency));
+            candidateMap.put(key, new DecryptionResultWithCharFrequency(decryptedCandidateAscii, charFrequency));
         }
         return candidateMap;
     }
@@ -65,16 +67,6 @@ public class SingleByteXorCipher {
                 .collect(Collectors.toMap(k -> k, k -> 1, Integer::sum));
     }
 
-    private byte[] repeat(byte b, int n) {
-        if (n < 1) {
-            throw new IllegalStateException("expected n to be bigger than 0 but was " + n);
-        }
-
-        byte[] result = new byte[n];
-        Arrays.fill(result, b);
-        return result;
-    }
-
     private static Set<Character> getEnglishLangCommonChars() {
         Set<Character> characterSet = new HashSet<>();
         characterSet.add(' ');
@@ -84,9 +76,6 @@ public class SingleByteXorCipher {
         return characterSet;
     }
 
-    @Value
-    private static class DecipherResult {
-        String decipheredText;
-        Map<Character, Integer> characterFrequency;
+    private record DecryptionResultWithCharFrequency(String decryptedText, Map<Character, Integer> characterFrequency) {
     }
 }

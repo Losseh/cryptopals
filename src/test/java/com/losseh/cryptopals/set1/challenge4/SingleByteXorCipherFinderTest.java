@@ -20,7 +20,7 @@ class SingleByteXorCipherFinderTest {
     //set1/challenge4
     @Test
     public void shouldFindCorrectAnswer() throws IOException {
-        Path file = Path.of("src", "test", "resources", "4.txt");
+        Path file = Path.of("src", "test", "resources", "challenge4", "4.txt");
         String actual = testee.findAndDecipher(file);
 
         assertThat(actual).isEqualTo("Now that the party is jumping\n");
