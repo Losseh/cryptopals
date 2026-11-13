@@ -2,6 +2,7 @@ package com.losseh.cryptopals.set1.challenge7;
 
 import com.losseh.cryptopals.util.Base64FileReader;
 import com.losseh.cryptopals.util.EcbEncryptionUtil;
+import com.losseh.cryptopals.util.FileReader;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
@@ -12,7 +13,9 @@ class EcbCipherChallenge7DecryptorTest {
 
     private final EcbCipherChallenge7Decryptor testee = new EcbCipherChallenge7Decryptor(
             new EcbEncryptionUtil(),
-            new Base64FileReader()
+            new Base64FileReader(
+                    new FileReader()
+            )
     );
 
     @Test
