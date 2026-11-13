@@ -1,6 +1,6 @@
 package com.losseh.cryptopals.set1.challenge6;
 
-import com.losseh.cryptopals.util.Challenge6Util;
+import com.losseh.cryptopals.util.Base64FileReader;
 import com.losseh.cryptopals.util.HammingDistanceUtil;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ class RepeatingXorCipherKeySizeFinderTest {
 
     private final RepeatingXorCipherKeySizeFinder testee = new RepeatingXorCipherKeySizeFinder(
             new HammingDistanceUtil(),
-            new Challenge6Util()
+            new Base64FileReader()
     );
 
     //set1/challenge6

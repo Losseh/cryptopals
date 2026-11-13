@@ -2,7 +2,7 @@ package com.losseh.cryptopals.set1.challenge6;
 
 import com.losseh.cryptopals.set1.challenge3.SingleByteXorCipher;
 import com.losseh.cryptopals.set1.model.DecryptionResult;
-import com.losseh.cryptopals.util.Challenge6Util;
+import com.losseh.cryptopals.util.Base64FileReader;
 import com.losseh.cryptopals.util.Xor;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ class RepeatingXorCipherDecryptorTest {
 
     private final Xor xor = new Xor();
     private final RepeatingXorCipherDecryptor testee = new RepeatingXorCipherDecryptor(
-            new Challenge6Util(),
+            new Base64FileReader(),
             new SingleByteXorCipher(xor),
             xor
     );

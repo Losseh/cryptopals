@@ -1,6 +1,6 @@
 package com.losseh.cryptopals.set1.challenge6;
 
-import com.losseh.cryptopals.util.Challenge6Util;
+import com.losseh.cryptopals.util.Base64FileReader;
 import com.losseh.cryptopals.util.HammingDistanceUtil;
 import lombok.RequiredArgsConstructor;
 import one.util.streamex.EntryStream;
@@ -15,11 +15,10 @@ public class RepeatingXorCipherKeySizeFinder {
     private static final int MAX_KEY_SIZE = 40;
 
     private final HammingDistanceUtil hammingDistanceUtil;
-    private final Challenge6Util challenge6Util;
+    private final Base64FileReader base64FileReader;
 
     public int findKeySize(Path file) {
-        List<byte[]> lineBytes = challenge6Util.fromBase64(file);
-        byte[] bytes = challenge6Util.flatten(lineBytes);
+        byte[] bytes = base64FileReader.readAndDecode(file);
 //        log.info("l={}, {}", bytes.length, HEX.formatHex(bytes));
 
         Map<Integer, Float> normEditDistanceByKeySize = new HashMap<>();

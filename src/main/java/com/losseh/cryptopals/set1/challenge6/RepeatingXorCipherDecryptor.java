@@ -2,26 +2,24 @@ package com.losseh.cryptopals.set1.challenge6;
 
 import com.losseh.cryptopals.set1.model.DecryptionResult;
 import com.losseh.cryptopals.set1.challenge3.SingleByteXorCipher;
-import com.losseh.cryptopals.util.Challenge6Util;
+import com.losseh.cryptopals.util.Base64FileReader;
 import com.losseh.cryptopals.util.Xor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Path;
 import java.util.HexFormat;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 public class RepeatingXorCipherDecryptor {
 
-    private final Challenge6Util challenge6Util;
+    private final Base64FileReader base64FileReader;
     private final SingleByteXorCipher singleByteXorCipher;
     private final Xor xor;
 
     public DecryptionResult decrypt(Path file, int keySize) {
-        List<byte[]> lineBytes = challenge6Util.fromBase64(file);
-        byte[] allBytes = challenge6Util.flatten(lineBytes);
+        byte[] allBytes = base64FileReader.readAndDecode(file);
 
         byte[] key = new byte[keySize];
         for (int keyOffset = 0; keyOffset < keySize; keyOffset++) {
