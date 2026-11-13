@@ -14,6 +14,7 @@ public class EcbCipherChallenge7Decryptor {
 
     public String decrypt(Path file, String key) {
         byte[] bytes = base64FileReader.readAndDecode(file);
-        return ecbEncryptionUtil.decrypt(bytes, key.getBytes());
+        byte[] decrypted = ecbEncryptionUtil.decrypt(bytes, key.getBytes());
+        return new String(decrypted);
     }
 }
